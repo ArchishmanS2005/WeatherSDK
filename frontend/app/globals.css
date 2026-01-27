@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 0.75rem;
+
+  /* Black & White Color System */
+  --background: 255 255 255;
+  --foreground: 0 0 0;
+
+  --card: 255 255 255;
+  --card-foreground: 0 0 0;
+
+  --primary: 0 0 0;
+  --primary-foreground: 255 255 255;
+
+  --secondary: 245 245 245;
+  --secondary-foreground: 0 0 0;
+
+  --muted: 245 245 245;
+  --muted-foreground: 115 115 115;
+
+  --accent: 229 229 229;
+  --accent-foreground: 0 0 0;
+
+  --border: 229 229 229;
+  --input: 229 229 229;
+  --ring: 0 0 0;
+}
+
+.dark {
+  --background: 0 0 0;
+  --foreground: 255 255 255;
+
+  --card: 23 23 23;
+  --card-foreground: 255 255 255;
+
+  --primary: 255 255 255;
+  --primary-foreground: 0 0 0;
+
+  --secondary: 38 38 38;
+  --secondary-foreground: 255 255 255;
+
+  --muted: 38 38 38;
+  --muted-foreground: 163 163 163;
+
+  --accent: 64 64 64;
+  --accent-foreground: 255 255 255;
+
+  --border: 38 38 38;
+  --input: 38 38 38;
+  --ring: 255 255 255;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+
+  /* Gradient Text */
+  .gradient-text {
+    background: linear-gradient(135deg, #000000 0%, #404040 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dark .gradient-text {
+    background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass Morphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .dark .glass {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
+}
