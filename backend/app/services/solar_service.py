@@ -1,6 +1,6 @@
 """Solar Radiation Service - Fetches solar and radiation data from Open-Meteo API"""
 
-from typing import Dict, Any
+from typing import Dict, Any, List
 import httpx
 from datetime import datetime, timedelta
 from app.config import settings
