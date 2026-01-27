@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adiyogi-weather"
+version = "0.1.0"
+description = "A comprehensive weather SDK for Open-Meteo APIs"
+authors = [
+  { name = "Archishman Sarkar", email = "adiyogi@example.com" },
+]
+readme = "README.md"
+license = { text = "MIT" }
+urls.Homepage = "https://github.com/archishman2005/adiyogi"
+urls.Repository = "https://github.com/archishman2005/adiyogi"
+urls."Bug Tracker" = "https://github.com/archishman2005/adiyogi/issues"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "httpx>=0.24.0",
+    "pydantic>=2.0.0",
+    "python-dateutil>=2.8.2",
+    "pandas>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=22.0.0",
+    "isort>=5.0.0",
+    "mypy>=1.0.0",
+]
