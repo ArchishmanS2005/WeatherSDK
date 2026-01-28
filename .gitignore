@@ -5,6 +5,7 @@ __pycache__/
 *.so
 .env
 .env.local
+.pypirc
 .venv
 env/
 venv/

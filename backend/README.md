@@ -1,6 +1,6 @@
 # Weather API Backend
 
-A FastAPI-based backend for weather data using the Open-Meteo API.
+A FastAPI-based backend for high-precision weather, climate, and environmental data.
 
 ## Features
 
@@ -8,15 +8,19 @@ A FastAPI-based backend for weather data using the Open-Meteo API.
 - 📅 7-16 day weather forecast
 - 🔍 Location search with geocoding
 - ⚡ Fast response times with caching
-- 🌍 No API key required (uses Open-Meteo)
+- 🌍 Multiple data sources and models
 - 📊 Comprehensive weather metrics
+- 🌊 Marine and ocean data
+- 🌫️ Air quality monitoring
+- ☀️ Solar radiation data
+- 🌡️ Climate projections
 
 ## Tech Stack
 
 - **FastAPI** - Modern Python web framework
-- **Open-Meteo API** - Free weather data API
 - **Pydantic** - Data validation
 - **httpx** - Async HTTP client
+- **Redis** - Caching layer
 
 ## Setup
 
@@ -65,6 +69,18 @@ The API will be available at `http://localhost:8000`
   - Get hourly and daily forecast
   - Up to 16 days of forecast data
 
+### Air Quality
+- `GET /api/air-quality/current?lat={lat}&lon={lon}`
+  - Get current air quality index and pollutant levels
+
+### Marine Data
+- `GET /api/marine/forecast?lat={lat}&lon={lon}`
+  - Get marine conditions and wave forecast
+
+### Historical Data
+- `GET /api/historical?lat={lat}&lon={lon}&start_date={date}&end_date={date}`
+  - Get historical weather observations
+
 ## API Documentation
 
 Once running, visit:
@@ -84,8 +100,8 @@ Once running, visit:
 ### Docker
 
 ```bash
-docker build -t weather-api .
-docker run -p 8000:8000 weather-api
+docker build -t adiyogi-api .
+docker run -p 8000:8000 adiyogi-api
 ```
 
 ## Environment Variables
@@ -99,3 +115,4 @@ docker run -p 8000:8000 weather-api
 ## License
 
 MIT
+

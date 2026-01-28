@@ -176,7 +176,7 @@ export default function ClimateCard({ lat, lon }: ClimateCardProps) {
             </Card>
 
             <div className="text-xs text-center text-muted-foreground">
-                Data provided by Open-Meteo Climate API (CMIP6 Models)
+                Data provided by Adiyogi Climate API (Advanced Climate Models)
             </div>
         </div>
     );

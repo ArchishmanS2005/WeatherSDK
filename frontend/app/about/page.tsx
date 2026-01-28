@@ -3,21 +3,13 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Github, Heart, Zap } from "lucide-react";
 import Link from "next/link";
+import { Navbar } from "@/components/layout/Navbar";
 
 export default function AboutPage() {
     return (
         <main className="min-h-screen bg-white dark:bg-black">
-            {/* Navigation */}
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-lg border-b border-border">
-                <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity">
-                        <ArrowLeft className="w-4 h-4" />
-                        Back to Home
-                    </Link>
-                    <div className="font-bold text-xl">About</div>
-                    <div className="w-20" /> {/* Spacer for centering */}
-                </div>
-            </nav>
+            {/* Navbar */}
+            <Navbar />
 
             <div className="pt-32 px-4 pb-20">
                 <div className="max-w-4xl mx-auto">
@@ -44,7 +36,7 @@ export default function AboutPage() {
                     >
                         <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
                         <p className="text-lg text-muted-foreground leading-relaxed">
-                            To provide the most beautiful and accessible weather experience on the web. We believe weather data should be free, fast, and presented in a way that's both informative and delightful to use.
+                            To provide the most beautiful and accessible weather experience on the web. We believe weather data should be free, fast, and presented in a way that&apos;s both informative and delightful to use.
                         </p>
                     </motion.div>
 
@@ -63,7 +55,7 @@ export default function AboutPage() {
                                 { name: "TypeScript", description: "Type-safe JavaScript" },
                                 { name: "Tailwind CSS", description: "Utility-first CSS framework" },
                                 { name: "Framer Motion", description: "Production-ready animations" },
-                                { name: "Open-Meteo API", description: "Free weather data API" },
+                                { name: "Weather Data API", description: "High-precision weather data" },
                             ].map((tech, index) => (
                                 <motion.div
                                     key={tech.name}
@@ -139,7 +131,7 @@ export default function AboutPage() {
                         transition={{ delay: 0.8 }}
                         className="mt-12 text-center text-muted-foreground"
                     >
-                        <p className="mb-2">Weather data provided by Open-Meteo</p>
+                        <p className="mb-2">Weather data powered by Adiyogi API</p>
                         <p className="text-sm">© 2026 Weather Application. MIT License.</p>
                     </motion.div>
                 </div>

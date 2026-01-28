@@ -308,6 +308,16 @@ export async function searchLocation(query: string): Promise<LocationResult[]> {
     return data.results || [];
 }
 
+export async function getReverseGeocode(lat: number, lon: number) {
+    const url = `${API_BASE_URL}/api/geocoding/reverse?lat=${lat}&lon=${lon}`;
+    console.log("Fetching reverse geocode:", url);
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Failed to reverse geocode: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+}
+
 export async function getCurrentWeather(
     lat: number,
     lon: number,

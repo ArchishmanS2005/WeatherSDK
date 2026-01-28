@@ -258,7 +258,7 @@ export default function WeatherPage() {
             {/* Footer */}
             <footer className="border-t border-border mt-20">
                 <div className="max-w-6xl mx-auto px-4 py-8 text-center text-sm text-muted-foreground">
-                    <p>Powered by Open-Meteo API • Built with Next.js & FastAPI</p>
+                    <p>Powered by Adiyogi Weather API • Built with Next.js & TypeScript</p>
                     <p className="mt-2">Weather • Air Quality • Marine • Solar • Historical Data</p>
                 </div>
             </footer>
