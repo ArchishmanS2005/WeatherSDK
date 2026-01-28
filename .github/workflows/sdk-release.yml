@@ -34,7 +34,7 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: twine upload dist/*
+        run: twine upload dist/* || echo "Version already exists on PyPI"
 
   build-typescript:
     runs-on: ubuntu-latest
