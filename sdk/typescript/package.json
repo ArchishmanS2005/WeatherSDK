@@ -3,32 +3,37 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "0.1.0",
-    "description": "Comprehensive TypeScript SDK for Open-Meteo APIs",
+    "version": "1.0.0",
+    "description": "Comprehensive TypeScript SDK for Adiyogi Weather API - High-precision weather, climate, and environmental data",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "lint": "eslint src/**/*.ts"
+        "lint": "eslint src/**/*.ts",
+        "prepublishOnly": "npm run build"
     },
     "keywords": [
         "weather",
         "sdk",
-        "open-meteo",
+        "adiyogi",
         "typescript",
         "climate",
-        "forecast"
+        "forecast",
+        "weather-api",
+        "meteorology",
+        "air-quality",
+        "environmental-data"
     ],
-    "author": "Archishman Sarkar",
+    "author": "Adiyogi Weather",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/archishman2005/adiyogi.git"
+        "url": "git+https://github.com/ArchishmanS2005/WeatherSDK.git"
     },
     "bugs": {
-        "url": "https://github.com/archishman2005/adiyogi/issues"
+        "url": "https://github.com/ArchishmanS2005/WeatherSDK/issues"
     },
-    "homepage": "https://github.com/archishman2005/adiyogi#readme",
+    "homepage": "https://github.com/ArchishmanS2005/WeatherSDK#readme",
     "license": "MIT",
     "dependencies": {
         "axios": "^1.6.0",
@@ -38,5 +43,10 @@
         "typescript": "^5.3.3",
         "@types/node": "^20.11.19",
         "ts-node": "^10.9.2"
-    }
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ]
 }

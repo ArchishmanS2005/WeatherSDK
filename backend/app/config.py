@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     api_timeout_seconds: int = 10
     cache_ttl_seconds: int = 300  # 5 minutes
     
-    # Open-Meteo API URLs
+    # Data Source API URLs
     openmeteo_forecast_url: str = "https://api.open-meteo.com/v1/forecast"
     openmeteo_geocoding_url: str = "https://geocoding-api.open-meteo.com/v1/search"
     
@@ -31,3 +31,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+

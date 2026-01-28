@@ -13,11 +13,12 @@ from app.models import (
     LocationInfo,
     WeatherUnits,
     WeatherCode,
+    ReverseGeocodeResponse,
 )
 
 
 class WeatherService:
-    """Service for interacting with Open-Meteo API"""
+    """Service for fetching weather data"""
     
     def __init__(self):
         self.client = httpx.AsyncClient(timeout=settings.api_timeout_seconds)
@@ -116,6 +117,49 @@ class WeatherService:
             
         except httpx.HTTPError as e:
             raise Exception(f"Failed to fetch location data: {str(e)}")
+
+    async def reverse_geocode(self, lat: float, lon: float) -> ReverseGeocodeResponse:
+        """Get location name from coordinates using OpenStreetMap Nominatim"""
+        cache_key = f"reverse:{lat}:{lon}"
+        cached = self._get_cache(cache_key)
+        if cached:
+            return cached
+
+        # Use Nominatim for reverse geocoding
+        url = "https://nominatim.openstreetmap.org/reverse"
+        params = {
+            "lat": lat,
+            "lon": lon,
+            "format": "json",
+            "zoom": 10,  # City level
+        }
+        headers = {
+            "User-Agent": "AdiyogiWeatherApp/1.0"
+        }
+
+        try:
+            response = await self.client.get(url, params=params, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+
+            address = data.get("address", {})
+            # Try to find the most relevant city name
+            name = address.get("city") or address.get("town") or address.get("village") or address.get("county") or "Unknown Location"
+            country = address.get("country", "")
+
+            result = ReverseGeocodeResponse(
+                name=name,
+                city=name,
+                country=country
+            )
+            
+            self._set_cache(cache_key, result)
+            return result
+
+        except Exception as e:
+            # Fallback if reverse geocoding fails
+            print(f"Reverse geocoding failed: {e}")
+            return ReverseGeocodeResponse(name=f"{lat:.2f}, {lon:.2f}", country="")
     
     async def get_current_weather(
         self, 
@@ -135,7 +179,7 @@ class WeatherService:
         params = {
             "latitude": lat,
             "longitude": lon,
-            "current": [
+            "current": ",".join([
                 "temperature_2m",
                 "apparent_temperature",
                 "weather_code",
@@ -146,7 +190,7 @@ class WeatherService:
                 "wind_gusts_10m",
                 "cloud_cover",
                 "precipitation",
-            ],
+            ]),
             "temperature_unit": temp_unit,
             "wind_speed_unit": wind_unit,
             "timezone": "auto",
@@ -206,7 +250,8 @@ class WeatherService:
         units: str = "metric"
     ) -> ForecastResponse:
         """Get hourly and daily forecast"""
-        cache_key = f"forecast:{lat}:{lon}:{days}:{units}"
+        # BUST CACHE: Added 'v2' to key
+        cache_key = f"forecast:v2:{lat}:{lon}:{days}:{units}"
         cached = self._get_cache(cache_key)
         if cached:
             return cached
@@ -217,7 +262,19 @@ class WeatherService:
         params = {
             "latitude": lat,
             "longitude": lon,
-            "hourly": [
+            "current": ",".join([
+                "temperature_2m",
+                "apparent_temperature",
+                "weather_code",
+                "relative_humidity_2m",
+                "surface_pressure",
+                "wind_speed_10m",
+                "wind_direction_10m",
+                "wind_gusts_10m",
+                "cloud_cover",
+                "precipitation",
+            ]),
+            "hourly": ",".join([
                 "temperature_2m",
                 "apparent_temperature",
                 "weather_code",
@@ -227,8 +284,8 @@ class WeatherService:
                 "wind_direction_10m",
                 "relative_humidity_2m",
                 "cloud_cover",
-            ],
-            "daily": [
+            ]),
+            "daily": ",".join([
                 "temperature_2m_max",
                 "temperature_2m_min",
                 "weather_code",
@@ -238,7 +295,7 @@ class WeatherService:
                 "sunset",
                 "uv_index_max",
                 "wind_speed_10m_max",
-            ],
+            ]),
             "temperature_unit": temp_unit,
             "wind_speed_unit": wind_unit,
             "timezone": "auto",
@@ -246,10 +303,17 @@ class WeatherService:
         }
         
         try:
+            print(f"Fetching forecast for {lat}, {lon}")
             response = await self.client.get(settings.openmeteo_forecast_url, params=params)
             response.raise_for_status()
             data = response.json()
             
+            # DEBUG LOGS
+            print(f"API Response Keys: {data.keys()}")
+            print(f"Current Keys: {data.get('current', {}).keys()}")
+            print(f"Wind Speed 10m: {data.get('current', {}).get('wind_speed_10m')}")
+
+            current_data = data.get("current", {})
             hourly_data = data.get("hourly", {})
             daily_data = data.get("daily", {})
             
@@ -285,6 +349,31 @@ class WeatherService:
                 timezone=data.get("timezone", "UTC"),
                 elevation=data.get("elevation"),
             )
+
+            current_weather = None
+            if current_data:
+                # Use daily max UV as proxy since current UV is not available
+                uv_proxy = 0
+                if daily_data and "uv_index_max" in daily_data:
+                    uv_list = daily_data.get("uv_index_max", [])
+                    if uv_list:
+                        uv_proxy = uv_list[0]
+
+                current_weather = CurrentWeather(
+                    time=current_data.get("time", ""),
+                    temperature=current_data.get("temperature_2m", 0),
+                    apparent_temperature=current_data.get("apparent_temperature", 0),
+                    weather_code=current_data.get("weather_code", 0),
+                    weather_description=self._interpret_weather_code(current_data.get("weather_code", 0)),
+                    humidity=current_data.get("relative_humidity_2m", 0),
+                    pressure=current_data.get("surface_pressure", 0),
+                    wind_speed=current_data.get("wind_speed_10m", 0),
+                    wind_direction=current_data.get("wind_direction_10m", 0),
+                    wind_gusts=current_data.get("wind_gusts_10m", 0),
+                    cloud_cover=current_data.get("cloud_cover", 0),
+                    precipitation=current_data.get("precipitation", 0),
+                    uv_index=uv_proxy,
+                )
             
             units_info = WeatherUnits(
                 temperature="°C" if units == "metric" else "°F",
@@ -293,6 +382,7 @@ class WeatherService:
             
             result = ForecastResponse(
                 location=location_info,
+                current=current_weather,
                 hourly=hourly_forecast,
                 daily=daily_forecast,
                 units=units_info,

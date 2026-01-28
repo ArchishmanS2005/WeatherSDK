@@ -37,6 +37,12 @@ class WeatherCode(IntEnum):
 
 
 # Geocoding Models
+class ReverseGeocodeResponse(BaseModel):
+    name: str
+    city: Optional[str] = None
+    country: str
+
+
 class LocationResult(BaseModel):
     """Single location search result"""
     id: int
@@ -129,6 +135,7 @@ class DailyForecast(BaseModel):
 class ForecastResponse(BaseModel):
     """Complete forecast response"""
     location: LocationInfo
+    current: Optional[CurrentWeather] = None
     hourly: HourlyForecast
     daily: DailyForecast
     units: WeatherUnits

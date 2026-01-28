@@ -47,8 +47,8 @@ async def lifespan(app: FastAPI):
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Weather API",
-    description="Advanced weather API using Open-Meteo - Air Quality, Marine, Historical & Solar Data",
+    title="Adiyogi Weather API",
+    description="High-precision weather, climate, and environmental data API with Air Quality, Marine, Historical & Solar Data",
     version="2.0.0",
     lifespan=lifespan,
 )
@@ -126,6 +126,21 @@ async def search_location(
     """
     try:
         result = await weather_service.search_location(query, count)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/geocoding/reverse")
+async def reverse_geocode(
+    lat: float = Query(..., ge=-90, le=90, description="Latitude"),
+    lon: float = Query(..., ge=-180, le=180, description="Longitude"),
+):
+    """
+    Get location name for specific coordinates
+    """
+    try:
+        result = await weather_service.reverse_geocode(lat, lon)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
