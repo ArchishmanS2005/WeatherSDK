@@ -92,10 +92,4 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-
-  /* Force black background for features page */
-  main.bg-black,
-  main[style*="backgroundColor"] {
-    background-color: #000000 !important;
-  }
 }
